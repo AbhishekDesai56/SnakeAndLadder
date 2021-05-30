@@ -6,7 +6,7 @@ public class SnakeLadder {
 	public static void main(String args[]) {
 		System.out.println("Welcome to Snakes & Ladders");
 
-		int numberOfPlayer = 1;
+		int numberOfPlayer = 2;
 
 		List<Player> players = new ArrayList<Player>();
 		for (int index = 0; index < numberOfPlayer; index++) {
@@ -36,14 +36,14 @@ public class SnakeLadder {
 
 			// If we're done, print end message.
 			if (done) {
-				System.out.println("The number of times the dice was played: " + diceIterated);
+				System.out.println(
+						"The number of times the dice was played: " + (diceIterated + board.isLadderTrueRollCount));
 				System.out.println(currPlayer + " wins");
 			}
 
 			// Set up for next player
 			playerIndex++;
 			if (playerIndex == numberOfPlayer) {
-
 				playerIndex = 0;
 			}
 		}

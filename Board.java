@@ -7,7 +7,7 @@ public class Board {
 	private final int COLS = 10;
 	private final int NUM_SNAKES = 8;
 	private final int NUM_LADDERS = 8;
-
+	public int isLadderTrueRollCount = 0;
 	private int[][] gameBoard;
 	private int[][] snakes;
 	private int[][] ladders;
@@ -49,53 +49,64 @@ public class Board {
 	 * @return True if the player reaches the final (100) spot, else false.
 	 */
 	public boolean movePlayer(Player player, int value) {
+		boolean isLadder = true;
+		while (isLadder) {
+			// Compute the new position
+			int position = playerPositions.get(player);
+			position += value;
 
-		// Compute the new position
-		int position = playerPositions.get(player);
-		position += value;
+			if (position >= 100) {
+				// If the new Position is 100 (or above), the player wins!
+				System.out.println("Current Position: " + position);
+				playerPositions.put(player, 100);
+				return true;
+			} else {
+				// If the new position is less than 100
+				// Check if the new position is the starting point for a snake
+				for (int index = 0; index < NUM_SNAKES; index++) {
+					if (snakes[index][0] == position) {
+						// if the new position is the starting point for a snake
+						// Move the player to the end position of the snakes
+						position = snakes[index][1];
+						playerPositions.put(player, position);
 
-		if (position >= 100) {
-			// If the new Position is 100 (or above), the player wins!
-			System.out.println("Current Position: " + position);
-			playerPositions.put(player, 100);
-			return true;
-		} else {
-			// If the new position is less than 100
-			// Check if the new position is the starting point for a snake
-			for (int index = 0; index < NUM_SNAKES; index++) {
-				if (snakes[index][0] == position) {
-					// if the new position is the starting point for a snake
-					// Move the player to the end position of the snakes
-					position = snakes[index][1];
+						System.out.println("Uh no. " + player + " Takes snakes from " + snakes[index][0] + " to "
+								+ snakes[index][1]);
+						return false;
+					}
+					isLadder = false;
+				}
+
+				// Check if the new position is the starting point for a ladder
+				for (int index = 0; index < NUM_LADDERS; index++) {
+					if (ladders[index][0] == position) {
+						// If the new position is the starting point of a ladder
+						// Move the player to the end position for the ladder
+						position = ladders[index][1];
+						playerPositions.put(player, position);
+						System.out.println("Yay! " + player + " takes ladder from " + ladders[index][0] + " to "
+								+ ladders[index][1]);
+						isLadder = true;
+						// return false;
+						break;
+
+					}
+				}
+
+				// If the player is not on a snake/ladder, then just update
+				// its position normally
+				if (isLadder != true) {
+					System.out.println("Current Position: " + position);
 					playerPositions.put(player, position);
-
-					System.out.println(
-							"Uh no. " + player + " Takes snakes from " + snakes[index][0] + " to " + snakes[index][1]);
-
 					return false;
+				} else {
+					System.out.println(player + " get the ladder at " + position + " It will play again");
+					value = player.takeTurn();
+					isLadderTrueRollCount++;
 				}
 			}
-
-			// Check if the new position is the starting point for a ladder
-			for (int index = 0; index < NUM_LADDERS; index++) {
-				if (ladders[index][0] == position) {
-					// If the new position is the starting point of a ladder
-					// Move the player to the end position for the ladder
-					position = ladders[index][1];
-					playerPositions.put(player, position);
-					System.out.println(
-							"Yay! " + player + " takes ladder from " + ladders[index][0] + " to " + ladders[index][1]);
-
-					return false;
-				}
-			}
-
-			// If the player is not on a snake/ladder, then just update
-			// its position normally
-			System.out.println("Current Position: " + position);
-			playerPositions.put(player, position);
-			return false;
 		}
+		return false;
 	}
 
 	/**
