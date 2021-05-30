@@ -14,7 +14,7 @@ public class SnakeLadder {
 			players.add(player);
 		}
 
-		// Initialize the board.
+		// Initialize the boards.
 		Board board = new Board(players);
 
 		// Loop until a player reaches the final spot.
