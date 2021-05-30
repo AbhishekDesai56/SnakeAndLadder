@@ -13,6 +13,9 @@ public class SnakeLadder {
 		for (int index= 0; index < numberOfPlayer; index++) {
 			Player player = new Player("P" + index);
 			players.add(player);
-		}	
+		}
+		
+		//Initialize the board.
+		Board board = new Board(players);
 	}
 }
