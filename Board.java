@@ -42,56 +42,59 @@ public class Board {
 	}
 
 	/**
-	  * Moves the give player based on the value provided
-	  * @param player The player to move
-	  * @param value The spaces to move
-	  * @return True if the player reaches the final (100) spot, else false.
-	  */
-	 public boolean movePlayer(Player player, int value) {
-		 
-		 //Compute the new position
-		 int position = playerPositions.get(player);
-		 position += value;
-		 
-		 if(position >= 100) {
-			 //If the new Position is 100 (or above), the player wins!
-			 playerPositions.put(player,  100);
-			 return true;
-		 } else {
-			 // If the new position is less than 100
-			 //Check if the new position is the starting point for a snake
-			 for(int index=0; index < NUM_SNAKES; index++) {
-				 if(snakes[index][0] == position) {
-					 //if the new position is the starting point for a snake
-					 //Move the player to the end position of the snakes
-					 position = snakes[index][1];
-					 playerPositions.put(player, position);
-					 
-					 System.out.println("Uh no. " + player + " Takes snakes from " + snakes[index][0] + " to " + snakes[index][1]);
-					 
-					 return false;
-				 }
-			 }
-			
-			 //Check if the new position is the starting point for a ladder
-			 for(int index=0; index < NUM_LADDERS; index++) {
-				 if(ladders[index][0] == position) {
-					 //If the new position is the starting point of a ladder
-					 //Move the player to the end position for the ladder
-					 position = ladders[index][1];
-					 playerPositions.put(player, position);
-					 System.out.println("Yay! " + player + " takes ladder from " + ladders[index][0] + " to " + ladders[index][1]);
-					 
-					 return false;
-				 }
-			 }
-			 
-			//If the player is not on a snake/ladder, then just update
-				//its position normally
-				playerPositions.put(player, position);
-				return false;
-		 }
-	 }
+	 * Moves the give player based on the value provided
+	 * 
+	 * @param player The player to move
+	 * @param value  The spaces to move
+	 * @return True if the player reaches the final (100) spot, else false.
+	 */
+	public boolean movePlayer(Player player, int value) {
+
+		// Compute the new position
+		int position = playerPositions.get(player);
+		position += value;
+
+		if (position >= 100) {
+			// If the new Position is 100 (or above), the player wins!
+			playerPositions.put(player, 100);
+			return true;
+		} else {
+			// If the new position is less than 100
+			// Check if the new position is the starting point for a snake
+			for (int index = 0; index < NUM_SNAKES; index++) {
+				if (snakes[index][0] == position) {
+					// if the new position is the starting point for a snake
+					// Move the player to the end position of the snakes
+					position = snakes[index][1];
+					playerPositions.put(player, position);
+
+					System.out.println(
+							"Uh no. " + player + " Takes snakes from " + snakes[index][0] + " to " + snakes[index][1]);
+
+					return false;
+				}
+			}
+
+			// Check if the new position is the starting point for a ladder
+			for (int index = 0; index < NUM_LADDERS; index++) {
+				if (ladders[index][0] == position) {
+					// If the new position is the starting point of a ladder
+					// Move the player to the end position for the ladder
+					position = ladders[index][1];
+					playerPositions.put(player, position);
+					System.out.println(
+							"Yay! " + player + " takes ladder from " + ladders[index][0] + " to " + ladders[index][1]);
+
+					return false;
+				}
+			}
+
+			// If the player is not on a snake/ladder, then just update
+			// its position normally
+			playerPositions.put(player, position);
+			return false;
+		}
+	}
 
 	/**
 	 * Sets the snakes for the board
@@ -141,65 +144,67 @@ public class Board {
 		ladders[7][1] = 91;
 	}
 
-	public String toString(){
-		//Use StringBuilder for creating the string
+	public String toString() {
+		// Use StringBuilder for creating the string
 		StringBuilder sb = new StringBuilder();
 		boolean oddRow = true;
 
-		//Note: The rows will be in reverse order, with 1-10 at the bottom, and 91-100 at the top.
-		//Note: 'Even' (1-10, 21-30, ..., 81-90)  are printed left to right.
-		//Note: 'Odd' (11-20, 31-40, ..., 91-100)  are printed right to left.
-		//Note: If the position is occupied by a player, we print the player, not the number.
-		
-		for (int row = ROWS-1; row >= 0; row--){
-			for (int col = 0; col < COLS; col++){
-				if (oddRow){
-					//oddRow: row = 9, 7, 5, 3, 1
-					//Check if any of the players occupy the current location
+		// Note: The rows will be in reverse order, with 1-10 at the bottom, and 91-100
+		// at the top.
+		// Note: 'Even' (1-10, 21-30, ..., 81-90) are printed left to right.
+		// Note: 'Odd' (11-20, 31-40, ..., 91-100) are printed right to left.
+		// Note: If the position is occupied by a player, we print the player, not the
+		// number.
+
+		for (int row = ROWS - 1; row >= 0; row--) {
+			for (int col = 0; col < COLS; col++) {
+				if (oddRow) {
+					// oddRow: row = 9, 7, 5, 3, 1
+					// Check if any of the players occupy the current location
 					String pl = "";
 					boolean occupied = false;
-					for (Player temp : playerPositions.keySet()){
-						if (playerPositions.get(temp) == gameBoard[row][COLS-1-col]){
-							//If a player occupies the current location, then set the flag
-							//and update pl
+					for (Player temp : playerPositions.keySet()) {
+						if (playerPositions.get(temp) == gameBoard[row][COLS - 1 - col]) {
+							// If a player occupies the current location, then set the flag
+							// and update pl
 							occupied = true;
 							pl += temp + " ";
 						}
 					}
-					
-					if (occupied){
-						//If at least one player occupies the location, then print those players
+
+					if (occupied) {
+						// If at least one player occupies the location, then print those players
 						pl += "\t";
 						sb.append(pl);
 					} else {
-						//Else, print the position number
-						sb.append(gameBoard[row][COLS-1-col] + "\t");						
+						// Else, print the position number
+						sb.append(gameBoard[row][COLS - 1 - col] + "\t");
 					}
 				} else {
-					//evenRow: row = 8, 6, 4, 2, 0
-					//Check if any of the players occupy the current location
+					// evenRow: row = 8, 6, 4, 2, 0
+					// Check if any of the players occupy the current location
 					boolean occupied = false;
 					String pl = "";
-					for (Player temp : playerPositions.keySet()){
-						if (playerPositions.get(temp) == gameBoard[row][col]){
-							//If a player occupies the current location, then set the flag
-							//and update pl
+					for (Player temp : playerPositions.keySet()) {
+						if (playerPositions.get(temp) == gameBoard[row][col]) {
+							// If a player occupies the current location, then set the flag
+							// and update pl
 							occupied = true;
 							pl += (temp + " ");
 						}
 					}
-					
-					if (occupied){
-						//If at least one player occupies the location, then print those players
+
+					if (occupied) {
+						// If at least one player occupies the location, then print those players
 						pl += "\t";
-						sb.append(pl);	
+						sb.append(pl);
 					} else {
-						//Else,  print the position number
+						// Else, print the position number
 						sb.append(gameBoard[row][col] + "\t");
 					}
 				}
-			} 
-			//Switch oddRow flag and print new line
+			}
+			// Switch oddRow flag and print new line
 			oddRow = !oddRow;
 			sb.append("\n");
 		}
