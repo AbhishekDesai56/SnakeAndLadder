@@ -56,6 +56,7 @@ public class Board {
 
 		if (position >= 100) {
 			// If the new Position is 100 (or above), the player wins!
+			System.out.println("Current Position: " + position);
 			playerPositions.put(player, 100);
 			return true;
 		} else {
@@ -91,6 +92,7 @@ public class Board {
 
 			// If the player is not on a snake/ladder, then just update
 			// its position normally
+			System.out.println("Current Position: " + position);
 			playerPositions.put(player, position);
 			return false;
 		}

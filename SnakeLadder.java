@@ -21,11 +21,12 @@ public class SnakeLadder {
 		// Players take turns to roll the die and move on the board
 		boolean done = false;
 		int playerIndex = 0;
+		int diceIterated = 0;
 		while (!done) {
 			// Player takes turn
 			Player currPlayer = players.get(playerIndex);
 			int roll = currPlayer.takeTurn();
-
+			diceIterated++;
 			// Update the board
 			done = board.movePlayer(currPlayer, roll);
 
@@ -35,12 +36,14 @@ public class SnakeLadder {
 
 			// If we're done, print end message.
 			if (done) {
+				System.out.println("The number of times the dice was played: " + diceIterated);
 				System.out.println(currPlayer + " wins");
 			}
 
 			// Set up for next player
 			playerIndex++;
 			if (playerIndex == numberOfPlayer) {
+
 				playerIndex = 0;
 			}
 		}
